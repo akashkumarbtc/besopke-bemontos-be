@@ -1,0 +1,10 @@
+venv/*
+media/*
+db.sqlite3
+.env
+admin_app/__pycache__/*
+pod_tracker_app/__pycache__/*
+bespoke/__pycache__/*
+
+admin_app/migrations/*
+pod_tracker_app/migrations/*
