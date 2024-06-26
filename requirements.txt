@@ -3,3 +3,4 @@ django_rest_framework
 pandas
 xlrd
 Pillow
+django-cors-headers
