@@ -1,19 +1,21 @@
-from django.http import JsonResponse
-from rest_framework.authtoken.models import Token
-from rest_framework.response import Response
-from rest_framework.views import APIView
-from rest_framework import status
-from .serializers import LoginSerializer
-from rest_framework.decorators import api_view
-from .models import POD
-from .serializers import PODSerializer
-import pandas as pd
 import os
-import glob
 import re
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.decorators import api_view, permission_classes
+import glob
+import pandas as pd
+from .models import POD
 from django.conf import settings
+from rest_framework import status
+from django.http import JsonResponse
+from .serializers import LoginSerializer
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
+from rest_framework.authtoken.models import Token
+from rest_framework.viewsets import ModelViewSet
+from .serializers import PODSerializer, PODSerializer
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.pagination import PageNumberPagination
+from rest_framework.decorators import api_view, permission_classes
 
 
 class LoginView(APIView):
@@ -24,6 +26,18 @@ class LoginView(APIView):
             token, created = Token.objects.get_or_create(user=user)
             return Response({"token": token.key}, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class PODPagination(PageNumberPagination):
+    page_size = 10  # Number of items per page
+    page_size_query_param = 'page_size'
+    max_page_size = 100
+
+
+class PODViewSet(ModelViewSet):
+    queryset = POD.objects.all()
+    serializer_class = PODSerializer
+    pagination_class = PODPagination
 
 
 @api_view(['POST'])
